@@ -23,7 +23,6 @@ import (
 )
 
 var s *state.State // i dun give a fuck
-var v *voice.Session
 
 var commands = []api.CreateCommandData{
 	{
@@ -137,13 +136,10 @@ func MessageHandler(e *gateway.MessageCreateEvent, ctx context.Context) {
 	}
 
 	// convert it to ogg (relunctantly)
-
-	if v == nil {
-		v, err = voice.NewSession(s)
-		if err != nil {
-			s.Client.SendTextReply(e.ChannelID, err.Error(), message.ID)
-			return
-		}
+	v, err := voice.NewSession(s)
+	if err != nil {
+		s.Client.SendTextReply(e.ChannelID, err.Error(), message.ID)
+		return
 	}
 
 	ffmpeg := exec.CommandContext(ctx,
@@ -152,7 +148,7 @@ func MessageHandler(e *gateway.MessageCreateEvent, ctx context.Context) {
 		// example. TODO: is it really?
 		"-threads", "1",
 		// input
-		"-i", "pipe: -c:a pcm_s16le -f s16le pipe:",
+		"-i", "-",
 		// conversion to ogg.
 		"-acodec", "libvorbis",
 		// Bitrate in kilobits. This doesn't matter, but I recommend 96k as the
