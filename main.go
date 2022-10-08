@@ -1,8 +1,5 @@
 package main
 
-// i don give a fuck if this code sucks this is just some shitty
-// bot for me and like 6 friends
-
 import (
 	"bytes"
 	"context"
