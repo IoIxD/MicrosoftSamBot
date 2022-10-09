@@ -96,7 +96,8 @@ func DiscordThread() (err error) {
 	s = state.New("Bot " + Config.Token)
 	s.AddIntents(0 |
 		gateway.IntentGuildMessages |
-		gateway.IntentGuilds,
+		gateway.IntentGuilds |
+		gateway.IntentGuildVoiceStates,
 	//gateway.IntentGuildMembers,
 	)
 	if err = s.Open(ctx); err != nil {
